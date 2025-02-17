@@ -59,6 +59,8 @@ fishscript | ><> | description
 `{ ... }` | | create a block, useful in combination with `while`, `when`
 `# comment` | |
 `while` | |
+`until` | |
+`if` | | `{ then } { else } if`
 `when` | | if without else
 `+` | `+` |
 `-` | `-` |

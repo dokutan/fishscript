@@ -288,10 +288,59 @@
               " "))))
     (fish.block code :left [1] :right 1)))
 
+(fn fish.if [then else]
+  (let [then (-> then fish.left> fish.>right)
+        else (-> else fish.left> fish.>right)
+        code [(.. "?vv" (string.rep " " (math.max (else:x) (then:x))) ">")]]
+    (for [i 1 (else:y)]
+        (table.insert
+          code
+          (..
+            "  "
+            (if (= i (. else :in-pos 1))
+              ">"
+              " ")
+            (. else :code i)
+            (string.rep " " (- (then:x) (else:x)))
+            (if (= i else.out-pos)
+              "^"
+              " "))))
+    (for [i 1 (then:y)]
+        (table.insert
+          code
+          (..
+            " "
+            (if (= i (. then :in-pos 1))
+              "> "
+              "  ")
+            (. then :code i)
+            (string.rep " " (- (else:x) (then:x)))
+            (if (= i then.out-pos)
+              "^"
+              " "))))
+    (fish.block code :left [1] :right 1)))
+
 (fn fish.while [block]
   (let [block (-> block fish.left> fish.>right)
         code [(.. "v" (string.rep " " (block:x)) "  >")
               (.. "v" (string.rep " " (block:x)) " < ")]]
+    (for [i 1 (block:y)]
+        (table.insert
+          code
+          (..
+            (if (= i (. block :in-pos 1))
+              ">"
+              " ")
+            (. block :code i)
+            (if (= i block.out-pos)
+              "?^^"
+              "   "))))
+    (fish.block code :left [1] :right 1)))
+
+(fn fish.until [block]
+  (let [block (-> block fish.left> fish.>right)
+        code [(.. "v" (string.rep " " (block:x)) " > ")
+              (.. "v" (string.rep " " (block:x)) "  <")]]
     (for [i 1 (block:y)]
         (table.insert
           code

@@ -53,10 +53,19 @@
                 (let [last (remove-nested ast depth)]
                   (fennel.list (fennel.sym "fish.when") last))
 
+                (= :if word)
+                (let [else (remove-nested ast depth)
+                      then (remove-nested ast depth)]
+                  (fennel.list (fennel.sym "fish.if") then else))
+
                 (= :while word)
                 (let [last (remove-nested ast depth)]
                   (fennel.list (fennel.sym "fish.while") last))
-                
+
+                (= :until word)
+                (let [last (remove-nested ast depth)]
+                  (fennel.list (fennel.sym "fish.until") last))
+
                 (. fish.ops word)
                 (fennel.list (fennel.sym ".") (fennel.sym "fish.ops") word)
 
