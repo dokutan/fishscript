@@ -1,0 +1,24 @@
+0
+{
+    1 +
+    1 swap
+    
+    dup 3 % 0 = {
+        "Fizz"
+        swap drop 0 swap
+    } when
+
+    dup 5 % 0 = {
+        "Buzz"
+        swap drop 0 swap
+    } when
+
+    swap {
+        dup n
+    } when
+
+    "\n"
+
+    dup 100 <
+} while
+end
