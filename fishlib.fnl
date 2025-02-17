@@ -290,9 +290,8 @@
 
 (fn fish.while [block]
   (let [block (-> block fish.left> fish.>right)
-        code [(.. "v" (string.rep " " (block:x)) ">")
-              (.. "v" (string.rep " " (block:x)) "<")
-              (.. " " (string.rep " " (block:x)) "?")]]
+        code [(.. "v" (string.rep " " (block:x)) "  >")
+              (.. "v" (string.rep " " (block:x)) " < ")]]
     (for [i 1 (block:y)]
         (table.insert
           code
@@ -302,31 +301,39 @@
               " ")
             (. block :code i)
             (if (= i block.out-pos)
-              "^"
-              " "))))
+              "?^^"
+              "   "))))
     (fish.block code :left [1] :right 1)))
 
 (fn fish.print [str]
   "Print `str`"
   (fish.line
     (..
-      "'"
-      (string.reverse
-        (-> str
-          (string.gsub "'" "'\"'\"'")
-          (string.gsub "\n" "'a'")))
-      "'"
+      (string.gsub
+        (..
+          "'"
+          (string.reverse
+            (-> str
+              (string.gsub "'" "'\"'\"'")
+              (string.gsub "\n" "'a'")))
+          "'")
+        "''"
+        "")
       (string.rep "o" (utf8.len str)))))
 
 (fn fish.int [i]
   "Push `i`"
-  (let [n (tostring (math.abs i))]
-    (fish.line
-      (..
-        (if (< i 0) "0" "")
-        (n:reverse)
-        (string.rep "a*+" (- (length n) 1))
-        (if (< i 0) "-" "")))))
+  (if
+    (< 9 i 16)   (fish.line (string.char (+ i 87)))
+    (= 39 i)     (fish.line "\"'\"")
+    (< 31 i 127) (fish.line (.. "'" (string.char i) "'"))
+    (let [n (tostring (math.abs i))]
+      (fish.line
+        (..
+          (if (< i 0) "0" "")
+          (n:reverse)
+          (string.rep "a*+" (- (length n) 1))
+          (if (< i 0) "-" ""))))))
 
 ;; ><> instructions as blocks
 (set fish.ops
@@ -354,6 +361,7 @@
    "o" (fish.line "o")
    "n" (fish.line "n")
    "nip" (fish.line "$~")
-   "2dup" (fish.line "$:@$:@")})
+   "2dup" (fish.line "$:@$:@")
+   "over" (fish.line "$:@")})
 
 fish

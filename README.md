@@ -40,10 +40,9 @@ end
 ```
 compiles to
 ```
-0v                                                                       >;
- v                                                                       <
-                                                                         ?
- >1+1$:3%0=?v              >:5%0=?v              >$?v  >''a''o:001a*+a*+(^
+0v                                                               >;
+ v                                                              <
+ >1+1$:3%0=?v              >:5%0=?v              >$?v  >ao:'d'(?^^
             >'zziF'oooo$~0$^      >'zzuB'oooo$~0$^  >:n^
 ```
 </details>
@@ -86,4 +85,5 @@ fishscript | ><> | description
 `n` | `n` |
 `nip` | `$~` | ( x y -- y )
 `2dup` | `$:@$:@` | ( x y -- x y x y )
+`over` | `$:@` | ( x y -- x y x )
 </details>
