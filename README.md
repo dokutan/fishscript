@@ -56,7 +56,34 @@ compiles to
 fishscript | ><> | description
 ---|---|---
 `"string"` | | print string
-`# comment` | | 
+`123` | | push a number
+`{ ... }` | | create a block, useful in combination with `while`, `when`
+`# comment` | |
 `while` | |
-`when` | |
+`when` | | if without else
+`+` | `+` |
+`-` | `-` |
+`*` | `*` |
+`/` | `,` | division
+`%` | `%` |
+`=` | `=` |
+`>` | `(` |
+`<` | `)` |
+`dup` | `:` | ( x -- x x )
+`drop` | `~` | ( x -- )
+`rot` | `@` | ( x y z -- z x y )
+`swap` | `$` | ( x y -- y x )
+`left` | `{` | shift stack left
+`right` | `}` | shift stack right
+`reverse` | `r` | reverse stack
+`length` | `l` | push length of stack
+`end` | `;` | end program
+`&` | `&` |
+`[` | `[` |
+`]` | `]` |
+`i` | `i` |
+`o` | `o` |
+`n` | `n` |
+`nip` | `$~` | ( x y -- y )
+`2dup` | `$:@$:@` | ( x y -- x y x y )
 </details>
