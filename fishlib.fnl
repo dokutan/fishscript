@@ -294,6 +294,23 @@
               " "))))
     (fish.block code :left [1] :right 1)))
 
+(fn fish.unless [block]
+  (let [block (-> block fish.left> fish.>right)
+        code [(.. "?!v" (string.rep " " (block:x)) ">")]]
+    (for [i 1 (block:y)]
+        (table.insert
+          code
+          (..
+            "  "
+            (if (= i (. block :in-pos 1))
+              ">"
+              " ")
+            (. block :code i)
+            (if (= i block.out-pos)
+              "^"
+              " "))))
+    (fish.block code :left [1] :right 1)))
+
 (fn fish.if [then else]
   (let [then (-> then fish.left> fish.>right)
         else (-> else fish.left> fish.>right)
@@ -382,9 +399,11 @@
 (fn fish.int [i]
   "Push `i`"
   (if
-    (< 9 i 16)   (fish.line (string.char (+ i 87)))
-    (= 39 i)     (fish.line "\"'\"")
-    (< 31 i 127) (fish.line (.. "'" (string.char i) "'"))
+    (< 9 i 16)            (fish.line (string.char (+ i 87)))
+    (= 39 i)              (fish.line "\"'\"")
+    (< 31 i 127)          (fish.line (.. "'" (string.char i) "'"))
+    (< 0xa1 i 0xd800)     (fish.line (.. "'" (utf8.char i) "'"))
+    (< 0xdfff i 0x110000) (fish.line (.. "'" (utf8.char i) "'"))
     (let [n (tostring (math.abs i))]
       (fish.line
         (..

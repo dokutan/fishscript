@@ -53,6 +53,10 @@
                 (let [last (remove-nested ast depth)]
                   (fennel.list (fennel.sym "fish.when") last))
 
+                (= :unless word)
+                (let [last (remove-nested ast depth)]
+                  (fennel.list (fennel.sym "fish.unless") last))
+
                 (= :if word)
                 (let [else (remove-nested ast depth)
                       then (remove-nested ast depth)]
@@ -130,6 +134,11 @@
           ;; else
           (not= :comment state)
           (set word (.. word char))))))
+  ;; insert end
+  (when (not= :end (. ast (length ast) 3))
+    (table.insert
+      ast
+      (fennel.list (fennel.sym ".") (fennel.sym "fish.ops") :end)))
   (tostring ast))
 
 (fennel.eval
