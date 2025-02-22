@@ -14,6 +14,12 @@
   (icollect [_ l (ipairs list)]
     (+ i l)))
 
+(fn reverse [str]
+  "Reverse `str`"
+  (accumulate [result ""
+               _ c (utf8.codes str)]
+    (.. (utf8.char c) result)))
+
 (fn fish.pprint [block]
   "Pretty print `block`"
   (..
@@ -360,7 +366,7 @@
     (string.gsub
       (..
         "'"
-        (string.reverse
+        (reverse
           (-> str
             (string.gsub "'" "'\"'\"'")
             (string.gsub "\n" "'a'")))
