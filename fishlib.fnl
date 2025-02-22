@@ -437,8 +437,10 @@
    "i" (fish.line "i")
    "o" (fish.line "o")
    "n" (fish.line "n")
-   "nip" (fish.line "$~")
-   "2dup" (fish.line "$:@$:@")
-   "over" (fish.line "$:@")})
+   ;; moved to stdlib
+   ;; "nip" (fish.line "$~")
+   ;; "2dup" (fish.line "$:@$:@")
+   ;; "over" (fish.line "$:@")
+   })
 
 fish

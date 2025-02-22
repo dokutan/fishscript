@@ -49,7 +49,7 @@ compiles to
 ## Language documentation
 
 <details open>
-<summary>Language documentation</summary>
+<summary>Builtin words</summary>
 
 fishscript | ><> | description
 ---|---|---
@@ -59,6 +59,7 @@ fishscript | ><> | description
 `{ ... }` | | create a block, useful in combination with `while`, `when`
 `# comment` | |
 `... :foo` | | define `foo`
+`INCLUDE: foo` | | include ./foo.🐟
 `while` | |
 `until` | |
 `if` | | `{ then } { else } if`
@@ -87,6 +88,14 @@ fishscript | ><> | description
 `i` | `i` |
 `o` | `o` |
 `n` | `n` |
+
+</details>
+
+<details open>
+<summary>stdlib</summary>
+To use these words, include the stdlib with `INCLUDE: stdlib`.
+fishscript | ><> | description
+---|---|---
 `nip` | `$~` | ( x y -- y )
 `2dup` | `$:@$:@` | ( x y -- x y x y )
 `over` | `$:@` | ( x y -- x y x )
