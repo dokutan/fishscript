@@ -55,6 +55,7 @@ compiles to
 fishscript | ><> | description
 ---|---|---
 `"string"` | | print string
+`'string'` | | push string
 `123` | | push a number
 `{ ... }` | | create a block, useful in combination with `while`, `when`
 `# comment` | |

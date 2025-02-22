@@ -22,7 +22,7 @@
     (faccumulate [r "" i 1 (block:x)]
       (..
         r
-        (if 
+        (if
           (and
             (= :up block.in-edge)
             (contains? block.in-pos i))
@@ -159,7 +159,7 @@
       (var code [(string.rep ">" (block:x))])
       (for [i 1 (block:y)]
         (table.insert code (. block :code i)))
-      (fish.block 
+      (fish.block
         code
         block.in-edge
         (if (= :left block.in-edge)
@@ -354,21 +354,24 @@
               "   "))))
     (fish.block code :left [1] :right 1)))
 
+(fn fish.string [str]
+  "Push `str`"
+  (fish.line
+    (string.gsub
+      (..
+        "'"
+        (string.reverse
+          (-> str
+            (string.gsub "'" "'\"'\"'")
+            (string.gsub "\n" "'a'")))
+        "'")
+      "''" "")))
+
 (fn fish.print [str]
   "Print `str`"
-  (fish.line
-    (..
-      (string.gsub
-        (..
-          "'"
-          (string.reverse
-            (-> str
-              (string.gsub "'" "'\"'\"'")
-              (string.gsub "\n" "'a'")))
-          "'")
-        "''"
-        "")
-      (string.rep "o" (utf8.len str)))))
+  (fish.hcat
+    (fish.string str)
+    (fish.line (string.rep "o" (utf8.len str)))))
 
 (fn fish.int [i]
   "Push `i`"

@@ -73,16 +73,16 @@
             (set state :normal)
             (set word ""))
 
-          ;; start of a string
+          ;; start of a printed string
           (and
             (= char "\"")
             (= :normal state))
-          (set state :string)
+          (set state :print)
 
-          ;; end of a string
+          ;; end of a printed string
           (and
             (= char "\"")
-            (= :string state))
+            (= :print state))
           (do
             (nested-insert ast depth
               (fennel.list
@@ -90,6 +90,27 @@
                 (-> word
                   (string.gsub "\\n" "\n")
                   (string.gsub "\\\"" "\"")
+                  (.. ""))))
+            (set word "")
+            (set state :normal))
+
+           ;; start of a string
+          (and
+            (= char "'")
+            (= :normal state))
+          (set state :string)
+
+          ;; end of a string
+          (and
+            (= char "'")
+            (= :string state))
+          (do
+            (nested-insert ast depth
+              (fennel.list
+                (fennel.sym "fish.string")
+                (-> word
+                  (string.gsub "\\n" "\n")
+                  (string.gsub "\\'" "'")
                   (.. ""))))
             (set word "")
             (set state :normal))
