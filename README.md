@@ -94,9 +94,11 @@ fishscript | ><> | description
 <details open>
 <summary>stdlib</summary>
 To use these words, include the stdlib with `INCLUDE: stdlib`.
+
 fishscript | ><> | description
 ---|---|---
 `nip` | `$~` | ( x y -- y )
 `2dup` | `$:@$:@` | ( x y -- x y x y )
 `over` | `$:@` | ( x y -- x y x )
+    
 </details>
