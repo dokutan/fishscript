@@ -58,6 +58,7 @@ fishscript | ><> | description
 `123` | | push an integer
 `{ ... }` | | create a block, useful in combination with `while`, `when`
 `# comment` | |
+`... :foo` | | define `foo`
 `while` | |
 `until` | |
 `if` | | `{ then } { else } if`

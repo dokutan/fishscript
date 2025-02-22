@@ -24,6 +24,7 @@
   (var state :normal)
   (var word "")
   (var depth 1)
+  (var dictionary {})
   (let [str (.. str " ")]
     (for [i 1 (length str)]
       (let [char (string.sub str i i)]
@@ -37,6 +38,9 @@
               (if
                 (= "" word)
                 nil
+
+                (. dictionary word)
+                (. dictionary word)
 
                 (tonumber word)
                 (fennel.list (fennel.sym "fish.int") (tonumber word))
@@ -72,6 +76,12 @@
 
                 (. fish.ops word)
                 (fennel.list (fennel.sym ".") (fennel.sym "fish.ops") word)
+
+                (and (= ":" (word:sub 1 1))
+                  (> (length word) 1))
+                (let [last (remove-nested ast depth)]
+                  (tset dictionary (word:sub 2) last)
+                  nil)
 
                 (error (.. "unknown word: " word))))
             (set state :normal)
