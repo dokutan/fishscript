@@ -314,12 +314,15 @@
 (fn fish.if [then else]
   (let [then (-> then fish.left> fish.>right)
         else (-> else fish.left> fish.>right)
-        code [(.. "?vv" (string.rep " " (math.max (else:x) (then:x))) ">")]]
-    (for [i 1 (else:y)]
+        collapse-else (= 1 (. else :in-pos 1) else.out-pos)
+        code (if collapse-else
+          [(.. "?v" (. else :code 1) (string.rep " " (- (then:x) (else:x))) ">")]
+          [(.. "?vv" (string.rep " " (math.max (else:x) (then:x))) ">")])]
+    (for [i (if collapse-else 2 1) (else:y)]
         (table.insert
           code
           (..
-            "  "
+            (if collapse-else " " "  ")
             (if (= i (. else :in-pos 1))
               ">"
               " ")
@@ -334,8 +337,9 @@
           (..
             " "
             (if (= i (. then :in-pos 1))
-              "> "
-              "  ")
+              ">"
+              " ")
+            (if collapse-else "" " ")
             (. then :code i)
             (string.rep " " (- (else:x) (then:x)))
             (if (= i then.out-pos)
@@ -345,8 +349,7 @@
 
 (fn fish.while [block]
   (let [block (-> block fish.left> fish.>right)
-        code [(.. "v" (string.rep " " (block:x)) "  >")
-              (.. "v" (string.rep " " (block:x)) " < ")]]
+        code [(.. "v" (string.rep " " (block:x)) " <>")]]
     (for [i 1 (block:y)]
         (table.insert
           code
@@ -362,8 +365,7 @@
 
 (fn fish.until [block]
   (let [block (-> block fish.left> fish.>right)
-        code [(.. "v" (string.rep " " (block:x)) " > ")
-              (.. "v" (string.rep " " (block:x)) "  <")]]
+        code [(.. "v" (string.rep " " (block:x)) "  <>")]]
     (for [i 1 (block:y)]
         (table.insert
           code
@@ -373,8 +375,8 @@
               " ")
             (. block :code i)
             (if (= i block.out-pos)
-              "?^^"
-              "   "))))
+              "?!^^"
+              "    "))))
     (fish.block code :left [1] :right 1)))
 
 (fn fish.string [str]
@@ -436,11 +438,6 @@
    "]" (fish.line "]")
    "i" (fish.line "i")
    "o" (fish.line "o")
-   "n" (fish.line "n")
-   ;; moved to stdlib
-   ;; "nip" (fish.line "$~")
-   ;; "2dup" (fish.line "$:@$:@")
-   ;; "over" (fish.line "$:@")
-   })
+   "n" (fish.line "n")})
 
 fish

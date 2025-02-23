@@ -39,8 +39,7 @@ An experimental programming language that compiles to [><>](https://esolangs.org
 ```
 compiles to
 ```
-0v                                                               >;
- v                                                              <
+0v                                                              <>;
  >1+1$:3%0=?v              >:5%0=?v              >$?v  >ao:'d'(?^^
             >'zziF'oooo$~0$^      >'zzuB'oooo$~0$^  >:n^
 ```
