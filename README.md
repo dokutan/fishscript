@@ -100,5 +100,13 @@ fishscript | ><> | description
 `nip` | `$~` | ( x y -- y )
 `2dup` | `$:@$:@` | ( x y -- x y x y )
 `over` | `$:@` | ( x y -- x y x )
-    
+`swapd` | `@@$` | ( x y z -- y x z )
+`div`, `÷` | | integer division ( x y -- x/y )
+`not` | `0=` |
+`!=` | `=0=` |
+`>=` | `(0=` |
+`<=` | `)0=` |
+`nth` | | push the nth element from the top of the stack (`1 nth` = `dup`)
+`abs` | `:0(2*1$-*n` |
+
 </details>

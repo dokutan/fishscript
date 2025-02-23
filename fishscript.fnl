@@ -5,6 +5,15 @@
 { swap drop } :nip
 { swap dup rot swap dup rot } :2dup
 { swap dup rot } :over
+{ rot rot swap } :swapd
+{ 2dup % swapd - swap / } :div
+div :÷
+{ 0 = } :not
+{ = not } :!=
+{ < not } :>=
+{ > not } :<=
+{ [ left dup right ] } :nth
+{ dup 0 < 2 * 1 swap - * } :abs
 ")
 
 (fn nested-insert [t depth value]
