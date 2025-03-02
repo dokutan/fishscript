@@ -45,7 +45,8 @@ div :÷
   (var dictionary {})
   (while (<= i (length str))
     (set i (+ 1 i))
-    (let [char (string.sub str i i)]
+    (let [char      (string.sub str i i)
+          two-chars (string.sub str i (+ 1 i))]
       (if
         (and
           (string.match char "%s")
@@ -168,6 +169,30 @@ div :÷
                 (string.gsub "\\n" "\n")
                 (string.gsub "\\'" "'")
                 (.. ""))))
+          (set word "")
+          (set state :normal))
+
+        ;; start of a fish block
+        (and
+          (= two-chars "«")
+          (= :normal state))
+        (do
+          (set i (+ 1 i))
+          (set state :fish))
+
+        ;; end of a fish block
+        (and
+          (= two-chars "»")
+          (= :fish state))
+        (let [out (. (remove-nested ast depth) 2)
+              in  (. (remove-nested ast depth) 2)]
+          (nested-insert ast depth
+            (fennel.list
+              (fennel.sym "fish.block")
+              (icollect [line (word:gmatch "([^\n]*)\n?")] line)
+              :left  [in]
+              :right out))
+          (set i (+ 1 i))
           (set word "")
           (set state :normal))
 

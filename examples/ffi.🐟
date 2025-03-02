@@ -1,0 +1,18 @@
+# ><> ffi
+
+# A rectangular section of ><> code can be included as a block:
+# `in out «code»`
+# The instruction pointer MUST enter from the left and leave on the right.
+# All lines in `code` MUST have the same length.
+# `in` is a position on the left, counted from the top
+# `out` is a position on the right, counted from the top
+
+# Example: define `random` to push either 0 or 1
+2 2
+« /0\
+>x|>
+ \1/»
+:random
+
+# Print 10 random bits
+0 { random n 1 + dup 10 < } while "\n"

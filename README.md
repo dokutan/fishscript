@@ -56,10 +56,11 @@ fishscript | ><> | description
 `'string'` | | push string
 `123` | | push an integer
 `{ ... }` | | create a block, useful in combination with `while`, `when`
+`in out «...»` | | create a block from ><> code, see examples/ffi.🐟
 `# comment` | |
 `... :foo` | | define `foo`
 `INCLUDE: foo` | | include ./foo.🐟
-`while` | |
+`while` | | see examples/loops.🐟
 `until` | |
 `while*` | | `{ condition } { code } while*`
 `if` | | `{ then } { else } if`
