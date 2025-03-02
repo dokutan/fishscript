@@ -61,6 +61,7 @@ fishscript | ><> | description
 `INCLUDE: foo` | | include ./foo.🐟
 `while` | |
 `until` | |
+`while*` | | `{ condition } { code } while*`
 `if` | | `{ then } { else } if`
 `when` | | if without else
 `unless` | | if without then

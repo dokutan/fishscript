@@ -1,0 +1,21 @@
+# Fishscript has a few different loops, these examples show how they can be used to count from 0 to 9 (inclusive).
+
+0 {
+    dup n
+    1 +
+    dup 10 <
+} while
+"\n"
+
+0 {
+    dup n
+    1 +
+    dup 10 =
+} until
+"\n"
+
+0 { dup 10 < } {
+    dup n
+    1 +
+} while*
+"\n"

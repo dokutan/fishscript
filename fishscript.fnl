@@ -107,6 +107,11 @@ div :÷
               (let [last (remove-nested ast depth)]
                 (fennel.list (fennel.sym "fish.while") last))
 
+              (= :while* word)
+              (let [block     (remove-nested ast depth)
+                    condition (remove-nested ast depth)]
+                (fennel.list (fennel.sym "fish.while*") condition block))
+
               (= :until word)
               (let [last (remove-nested ast depth)]
                 (fennel.list (fennel.sym "fish.until") last))

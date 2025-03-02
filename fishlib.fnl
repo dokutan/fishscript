@@ -266,7 +266,7 @@
             (if
               (< i (. block :in-pos 1)) ">"
               (= i (. block :in-pos 1)) "v"
-              (= i (. block :in-pos 1)) " "))))
+              (> i (. block :in-pos 1)) " "))))
       (for [i 1 (block:y)]
         (table.insert
           code (. block :code i)))
@@ -378,6 +378,40 @@
               "?!^^"
               "    "))))
     (fish.block code :left [1] :right 1)))
+
+(fn fish.while* [condition block]
+  (let [condition (-> condition fish.left> fish.>right)
+        block     (-> block     fish.left> fish.>right)
+        code      []]
+    (for [i 1 (condition:y)]
+        (table.insert
+          code
+          (..
+            (if
+              (= i (. condition :in-pos 1)) ">"
+              (> i (. condition :in-pos 1)) "^"
+              " ")
+            (. condition :code i)
+            (if (= i condition.out-pos)
+              "?v"
+              "  ")
+            (string.rep " " (+ 1 (block:x))))))
+    (table.insert
+      code
+      (.. "^" (string.rep " " (+ 2 (condition:x) (block:x))) "<"))
+    (for [i 1 (block:y)]
+        (table.insert
+          code
+          (..
+            (string.rep " " (+ 2 (condition:x)))
+            (if (= i (. block :in-pos 1))
+              ">"
+              " ")
+            (. block :code i)
+            (if (= i block.out-pos)
+              "^"
+              " "))))
+    (fish.block code :left condition.in-pos :right condition.out-pos)))
 
 (fn fish.string [str]
   "Push `str`"
