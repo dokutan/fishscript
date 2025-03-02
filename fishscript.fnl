@@ -14,6 +14,7 @@ div :÷
 { > not } :<=
 { [ left dup right ] } :nth
 { dup 0 < 2 * 1 swap - * } :abs
+{ dup 1 % - } :floor
 ")
 
 (fn nested-insert [t depth value]
