@@ -60,6 +60,7 @@ fishscript | ><> | description
 `# comment` | |
 `... :foo` | | define `foo`
 `INCLUDE: foo` | | include ./foo.🐟
+`loop` | | `{ code } loop` infinite loop
 `while` | | see examples/loops.🐟
 `until` | |
 `while*` | | `{ condition } { code } while*`

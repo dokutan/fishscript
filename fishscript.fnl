@@ -104,6 +104,10 @@ div :÷
                     then (remove-nested ast depth)]
                 (fennel.list (fennel.sym "fish.if") then else))
 
+              (= :loop word)
+              (let [last (remove-nested ast depth)]
+                (fennel.list (fennel.sym "fish.loop") last))
+
               (= :while word)
               (let [last (remove-nested ast depth)]
                 (fennel.list (fennel.sym "fish.while") last))

@@ -347,6 +347,22 @@
               " "))))
     (fish.block code :left [1] :right 1)))
 
+(fn fish.loop [block]
+  (let [block (-> block fish.left> fish.>right)
+        code [(.. "v" (string.rep " " (block:x)) "<")]]
+    (for [i 1 (block:y)]
+        (table.insert
+          code
+          (..
+            (if (= i (. block :in-pos 1))
+              ">"
+              " ")
+            (. block :code i)
+            (if (= i block.out-pos)
+              "^"
+              " "))))
+    (fish.block code :left [1] :right 1)))
+
 (fn fish.while [block]
   (let [block (-> block fish.left> fish.>right)
         code [(.. "v" (string.rep " " (block:x)) " <>")]]
