@@ -111,5 +111,7 @@ fishscript | ><> | description
 `nth` | | push the nth element from the top of the stack (`1 nth` = `dup`)
 `abs` | `:0(2*1$-*n` |
 `floor` | `:1%-` |
+`min` | | ( x y -- min(x,y) )
+`min` | | ( x y -- max(x,y) )
 
 </details>
