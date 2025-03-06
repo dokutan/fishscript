@@ -45,6 +45,8 @@ div :÷
   (var word "")
   (var depth 1)
   (var dictionary {})
+  (var variables  {})
+  (var variable-pos 0)
   (while (<= i (length str))
     (set i (+ 1 i))
     (let [char      (string.sub str i i)
@@ -125,6 +127,17 @@ div :÷
 
               (. fish.ops word)
               (fennel.list (fennel.sym ".") (fennel.sym "fish.ops") word)
+
+              (and (= "=" (word:sub 1 1))
+                (> (length word) 1))
+              (do
+                (when (not (. variables (word:sub 2)))
+                  (tset variables (word:sub 2) variable-pos)
+                  (set variable-pos (+ 1 variable-pos)))
+                (fennel.list (fennel.sym "fish.put") (. variables (word:sub 2)) -1))
+
+              (. variables word)
+              (fennel.list (fennel.sym "fish.get") (. variables word) -1)
 
               (and (= ":" (word:sub 1 1))
                 (> (length word) 1))

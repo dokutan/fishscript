@@ -58,7 +58,8 @@ fishscript | ><> | description
 `{ ... }` | | create a block, useful in combination with `while`, `when`
 `in out «...»` | | create a block from ><> code, see examples/ffi.🐟
 `# comment` | |
-`... :foo` | | define `foo`
+`... :foo` | | define `foo` at compile time
+`=foo` | | pop a value and assign it to the variable `foo`, see examples/variables.🐟
 `INCLUDE: foo` | | include ./foo.🐟
 `loop` | | `{ code } loop` infinite loop
 `while` | | see examples/loops.🐟

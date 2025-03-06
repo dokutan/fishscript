@@ -464,6 +464,20 @@
           (string.rep "a*+" (- (length n) 1))
           (if (< i 0) "-" ""))))))
 
+(fn fish.put [x y]
+  "Pop a value and put it at `x`,`y` in the code."
+  (fish.hcat
+    (fish.int x)
+    (fish.int y)
+    (fish.line "p")))
+
+(fn fish.get [x y]
+  "Push the character at `x`,`y` in the code."
+  (fish.hcat
+    (fish.int x)
+    (fish.int y)
+    (fish.line "g")))
+
 ;; ><> instructions as blocks
 (set fish.ops
   {"+" (fish.line "+")

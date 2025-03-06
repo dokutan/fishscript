@@ -1,0 +1,6 @@
+# Variables are stored in the program at negative indices and accessed with the ><> instructions `p` and `g`.
+
+1 =x
+{ x 10 < } {
+    x dup n 1 + =x
+} while*
