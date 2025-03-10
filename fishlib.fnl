@@ -277,39 +277,31 @@
     :right (error "not implemented")))
 
 ;; control flow
-(fn fish.when [block]
-  (let [block (-> block fish.left> fish.>right)
-        code [(.. "?v" (string.rep " " (block:x)) ">")]]
-    (for [i 1 (block:y)]
-        (table.insert
-          code
-          (..
-            " "
-            (if (= i (. block :in-pos 1))
-              ">"
-              " ")
-            (. block :code i)
-            (if (= i block.out-pos)
-              "^"
-              " "))))
-    (fish.block code :left [1] :right 1)))
+(fn fish.generic-loop [start end left-in left right-out right]
+  ""
+  (assert (= (length start) (length left-in) (length left)))
+  (assert (= (length end) (length right-out) (length right)))
+  (fn [block]
+    (let [block (-> block fish.left> fish.>right)
+          code [(.. start (string.rep " " (block:x)) end)]]
+      (for [i 1 (block:y)]
+          (table.insert
+            code
+            (..
+              (if (= i (. block :in-pos 1))
+                left-in
+                left)
+              (. block :code i)
+              (if (= i block.out-pos)
+                right-out
+                right))))
+      (fish.block code :left [1] :right 1))))
 
-(fn fish.unless [block]
-  (let [block (-> block fish.left> fish.>right)
-        code [(.. "?!v" (string.rep " " (block:x)) ">")]]
-    (for [i 1 (block:y)]
-        (table.insert
-          code
-          (..
-            "  "
-            (if (= i (. block :in-pos 1))
-              ">"
-              " ")
-            (. block :code i)
-            (if (= i block.out-pos)
-              "^"
-              " "))))
-    (fish.block code :left [1] :right 1)))
+(set fish.when (fish.generic-loop "?v" ">" " >" "  " "^" " "))
+(set fish.unless (fish.generic-loop "?!v" ">" "  >" "   " "^" " "))
+(set fish.loop (fish.generic-loop "?!v" ">" "  >" "   " "^" " "))
+(set fish.while (fish.generic-loop "v" " <>" ">" " " "?^^" "   "))
+(set fish.until (fish.generic-loop "v" "  <>" ">" " " "?!^^" "    "))
 
 (fn fish.if [then else]
   (let [then (-> then fish.left> fish.>right)
@@ -345,54 +337,6 @@
             (if (= i then.out-pos)
               "^"
               " "))))
-    (fish.block code :left [1] :right 1)))
-
-(fn fish.loop [block]
-  (let [block (-> block fish.left> fish.>right)
-        code [(.. "v" (string.rep " " (block:x)) "<")]]
-    (for [i 1 (block:y)]
-        (table.insert
-          code
-          (..
-            (if (= i (. block :in-pos 1))
-              ">"
-              " ")
-            (. block :code i)
-            (if (= i block.out-pos)
-              "^"
-              " "))))
-    (fish.block code :left [1] :right 1)))
-
-(fn fish.while [block]
-  (let [block (-> block fish.left> fish.>right)
-        code [(.. "v" (string.rep " " (block:x)) " <>")]]
-    (for [i 1 (block:y)]
-        (table.insert
-          code
-          (..
-            (if (= i (. block :in-pos 1))
-              ">"
-              " ")
-            (. block :code i)
-            (if (= i block.out-pos)
-              "?^^"
-              "   "))))
-    (fish.block code :left [1] :right 1)))
-
-(fn fish.until [block]
-  (let [block (-> block fish.left> fish.>right)
-        code [(.. "v" (string.rep " " (block:x)) "  <>")]]
-    (for [i 1 (block:y)]
-        (table.insert
-          code
-          (..
-            (if (= i (. block :in-pos 1))
-              ">"
-              " ")
-            (. block :code i)
-            (if (= i block.out-pos)
-              "?!^^"
-              "    "))))
     (fish.block code :left [1] :right 1)))
 
 (fn fish.while* [condition block]
