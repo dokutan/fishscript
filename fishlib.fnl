@@ -299,7 +299,7 @@
 
 (set fish.when (fish.generic-loop "?v" ">" " >" "  " "^" " "))
 (set fish.unless (fish.generic-loop "?!v" ">" "  >" "   " "^" " "))
-(set fish.loop (fish.generic-loop "?!v" ">" "  >" "   " "^" " "))
+(set fish.loop (fish.generic-loop "v" "<" ">" " " "^" " "))
 (set fish.while (fish.generic-loop "v" " <>" ">" " " "?^^" "   "))
 (set fish.until (fish.generic-loop "v" "  <>" ">" " " "?!^^" "    "))
 
