@@ -1,0 +1,62 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Fishscript",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"name": "string.quoted.single.fishscript",
+			"begin": "'",
+			"end": "'",
+			"patterns": [
+				{
+					"name": "constant.character.escape.fishscript",
+					"match": "\\\\."
+				}
+			]
+		},
+		{
+			"name": "constant.numeric.integer.fishscript",
+			"match": "\\b-?[0-9]+\\b"
+		},
+		{
+			"name": "comment.line.number-sign.fishscript",
+			"match": "(\\s|^)#.*"
+		},
+		{
+			"name": "support.function.fishscript",
+			"match": "(?<=^| )(INCLUDE:|\\+|-|\\*|/|%|=|<|>|dup|drop|rot|swap|left|right|reverse|length|end|&|\\[|\\]|i|o|n)(?=$| )"
+		},
+		{
+			"name": "variable.other.fishscript",
+			"match": "(?<=^| |:|=)([^ :=][^ ]*)(?=$| )"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.fishscript",
+					"match": "(?<=^| )(loop|while|until|while\\*|if|when|unless)(?=$| )"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.fishscript",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.fishscript",
+					"match": "\\\\."
+				}
+			]
+		}
+	},
+	
+	"scopeName": "source.fishscript"
+}

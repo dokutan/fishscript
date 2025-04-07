@@ -1,0 +1,16 @@
+{
+	"if": {
+		"prefix": "if",
+		"body": [
+			"{ $1 } { $2 } if"
+		],
+		"description": "{ then } { else } if"
+	},
+	"while*": {
+		"prefix": "while*",
+		"body": [
+			"{ $1 } { $2 } while*"
+		],
+		"description": "{ condition } { code } while*"
+	}
+}

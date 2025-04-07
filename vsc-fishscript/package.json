@@ -1,0 +1,29 @@
+{
+  "name": "fishscript",
+  "displayName": "Fishscript",
+  "description": "Syntax highlighting for fishscript",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.97.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "fishscript",
+      "aliases": ["Fishscript", "fishscript"],
+      "extensions": [".🐟"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "fishscript",
+      "scopeName": "source.fishscript",
+      "path": "./syntaxes/fishscript.tmLanguage.json"
+    }],
+    "snippets": [{
+      "language": "fishscript",
+      "path": "./snippets.json"
+    }]
+  }
+}

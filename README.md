@@ -45,6 +45,18 @@ compiles to
 ```
 </details>
 
+## VS Code extension
+A simple extension is available in `vsc-fishscript`.
+```sh
+cd vsc-fishscript
+
+# Package the extension
+npx --package @vscode/vsce -- vsce package
+
+# Install the extension
+code --install-extension fishscript-0.0.1.vsix
+```
+
 ## Language documentation
 
 <details open>
