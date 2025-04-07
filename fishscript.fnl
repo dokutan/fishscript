@@ -209,7 +209,7 @@ div :÷
             (fennel.list
               (fennel.sym "fish.block")
               (icollect [line (word:gmatch "([^\n]*)\n?")] line)
-              :left  [in]
+              :left  in
               :right out))
           (set i (+ 1 i))
           (set word "")

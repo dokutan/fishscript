@@ -1,19 +1,6 @@
 (local fish {})
 
 ;; utils
-(fn contains? [list value]
-  "Check if `list` contains `value`."
-  (var result false)
-  (each [_ v (ipairs list)]
-    (when (= v value)
-      (set result true)))
-  result)
-
-(fn ++ [i list]
-  "Add `i` to every element in `list`"
-  (icollect [_ l (ipairs list)]
-    (+ i l)))
-
 (fn reverse [str]
   "Reverse `str`"
   (accumulate [result ""
@@ -31,7 +18,7 @@
         (if
           (and
             (= :up block.in-edge)
-            (contains? block.in-pos i))
+            (= i block.in-pos))
           "i"
           (and
             (= :up block.out-edge)
@@ -47,7 +34,7 @@
         (if
           (and
             (= :left block.in-edge)
-            (contains? block.in-pos i))
+            (= i block.in-pos))
           "i"
           (and
             (= :left block.out-edge)
@@ -60,7 +47,7 @@
         (if
           (and
             (= :right block.in-edge)
-            (contains? block.in-pos i))
+            (= i block.in-pos))
           "i"
           (and
             (= :right block.out-edge)
@@ -76,7 +63,7 @@
         (if
           (and
             (= :down block.in-edge)
-            (contains? block.in-pos i))
+            (= i block.in-pos))
           "i"
           (and
             (= :down block.out-edge)
@@ -105,7 +92,7 @@
 
 (fn fish.line [code]
   "Construct a block from a single line."
-  (fish.block [code] :left [1] :right 1))
+  (fish.block [code] :left 1 :right 1))
 
 ;; block composition and reshaping
 (fn fish.right|left [a b]
@@ -113,11 +100,7 @@
   (assert (= :right a.out-edge))
   (assert (= :left  b.in-edge))
   (var code [])
-  (var no-glue?
-    (and
-      (= 1 (length b.in-pos))
-      (= (. b :in-pos 1)
-          a.out-pos)))
+  (var no-glue? (= b.in-pos a.out-pos))
   (for [i 1 (math.max (a:y) (b:y))]
     (table.insert
       code
@@ -128,9 +111,9 @@
         (if
           no-glue?
           ""
-          (< i (. b :in-pos 1)) "v"
-          (= i (. b :in-pos 1)) ">"
-          (> i (. b :in-pos 1)) "^")
+          (< i b.in-pos) "v"
+          (= i b.in-pos) ">"
+          (> i b.in-pos) "^")
         (if (< (b:y) i)
           (string.rep " " (b:x))
           (. b :code i)))))
@@ -169,7 +152,7 @@
         code
         block.in-edge
         (if (= :left block.in-edge)
-          (++ 1 block.in-pos)
+          (+ 1 block.in-pos)
           block.in-pos)
         :right
         1))
@@ -195,7 +178,7 @@
         code
         block.in-edge
         (if (= :right block.in-edge)
-          (++ 1 block.in-pos)
+          (+ 1 block.in-pos)
           block.in-pos)
         :left
         1))
@@ -235,7 +218,7 @@
       (var code [])
       (for [i 1 (block:y)]
         (table.insert code (.. "v" (. block :code i))))
-      (fish.block code block.in-edge (++ 1 block.in-pos) :down 1))))
+      (fish.block code block.in-edge (+ 1 block.in-pos) :down 1))))
 
 (fn fish.left> [block]
   "Change in-edge to :left"
@@ -252,9 +235,9 @@
         (faccumulate [r "" i 1 (block:x)]
           (.. r
             (if
-              (< i (. block :in-pos 1)) ">"
-              (= i (. block :in-pos 1)) "^"
-              (> i (. block :in-pos 1)) " "))))
+              (< i block.in-pos) ">"
+              (= i block.in-pos) "^"
+              (> i block.in-pos) " "))))
       (fish.block code :left [(+ 1 (block:y))] block.out-edge block.out-pos))
     :up
     (do
@@ -264,13 +247,13 @@
         (faccumulate [r "" i 1 (block:x)]
           (.. r
             (if
-              (< i (. block :in-pos 1)) ">"
-              (= i (. block :in-pos 1)) "v"
-              (> i (. block :in-pos 1)) " "))))
+              (< i block.in-pos) ">"
+              (= i block.in-pos) "v"
+              (> i block.in-pos) " "))))
       (for [i 1 (block:y)]
         (table.insert
           code (. block :code i)))
-      (fish.block code :left [1] block.out-edge
+      (fish.block code :left 1 block.out-edge
         (if (= :right block.out-edge)
           block.out-pos
           (+ 1 block.out-pos))))
@@ -288,14 +271,14 @@
           (table.insert
             code
             (..
-              (if (= i (. block :in-pos 1))
+              (if (= i block.in-pos)
                 left-in
                 left)
               (. block :code i)
               (if (= i block.out-pos)
                 right-out
                 right))))
-      (fish.block code :left [1] :right 1))))
+      (fish.block code :left 1 :right 1))))
 
 (set fish.when (fish.generic-loop "?v" ">" " >" "  " "^" " "))
 (set fish.unless (fish.generic-loop "?!v" ">" "  >" "   " "^" " "))
@@ -306,7 +289,7 @@
 (fn fish.if [then else]
   (let [then (-> then fish.left> fish.>right)
         else (-> else fish.left> fish.>right)
-        collapse-else (= 1 (. else :in-pos 1) else.out-pos)
+        collapse-else (= 1 else.in-pos else.out-pos)
         code (if collapse-else
           [(.. "?v" (. else :code 1) (string.rep " " (- (then:x) (else:x))) ">")]
           [(.. "?vv" (string.rep " " (math.max (else:x) (then:x))) ">")])]
@@ -315,7 +298,7 @@
           code
           (..
             (if collapse-else " " "  ")
-            (if (= i (. else :in-pos 1))
+            (if (= i else.in-pos)
               ">"
               " ")
             (. else :code i)
@@ -328,7 +311,7 @@
           code
           (..
             " "
-            (if (= i (. then :in-pos 1))
+            (if (= i then.in-pos)
               ">"
               " ")
             (if collapse-else "" " ")
@@ -337,7 +320,7 @@
             (if (= i then.out-pos)
               "^"
               " "))))
-    (fish.block code :left [1] :right 1)))
+    (fish.block code :left 1 :right 1)))
 
 (fn fish.while* [condition block]
   (let [condition (-> condition fish.left> fish.>right)
@@ -348,8 +331,8 @@
           code
           (..
             (if
-              (= i (. condition :in-pos 1)) ">"
-              (> i (. condition :in-pos 1)) "^"
+              (= i condition.in-pos) ">"
+              (> i condition.in-pos) "^"
               " ")
             (. condition :code i)
             (if (= i condition.out-pos)
@@ -364,7 +347,7 @@
           code
           (..
             (string.rep " " (+ 2 (condition:x)))
-            (if (= i (. block :in-pos 1))
+            (if (= i block.in-pos)
               ">"
               " ")
             (. block :code i)
