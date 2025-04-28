@@ -78,6 +78,7 @@ fishscript | ><> | description
 `until` | |
 `while*` | | `{ condition } { code } while*`
 `if` | | `{ then } { else } if`
+`cond` | | `{ cond1 body1 ... condN bodyN } cond`
 `when` | | if without else
 `unless` | | if without then
 `+` | `+` |
@@ -125,6 +126,6 @@ fishscript | ><> | description
 `abs` | `:0(2*1$-*n` |
 `floor` | `:1%-` |
 `min` | | ( x y -- min(x,y) )
-`min` | | ( x y -- max(x,y) )
+`max` | | ( x y -- max(x,y) )
 
 </details>

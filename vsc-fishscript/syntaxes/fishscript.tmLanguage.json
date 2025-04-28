@@ -41,7 +41,7 @@
 			"patterns": [
 				{
 					"name": "keyword.control.fishscript",
-					"match": "(?<=^| )(loop|while|until|while\\*|if|when|unless)(?=$| )"
+					"match": "(?<=^| )(loop|while|until|while\\*|if|when|unless|cond)(?=$| )"
 				}
 			]
 		},

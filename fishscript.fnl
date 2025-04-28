@@ -108,6 +108,13 @@ div :÷
                     then (remove-nested ast depth)]
                 (fennel.list (fennel.sym "fish.if") then else))
 
+              (= :cond word)
+              (let [clauses     (remove-nested ast depth)
+                    clauses-seq []]
+                (for [i 2 (length clauses)]
+                  (table.insert clauses-seq (. clauses i)))
+                (fennel.list (fennel.sym "fish.cond") clauses-seq))
+
               (= :loop word)
               (let [last (remove-nested ast depth)]
                 (fennel.list (fennel.sym "fish.loop") last))

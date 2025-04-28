@@ -7,6 +7,20 @@
                _ c (utf8.codes str)]
     (.. (utf8.char c) result)))
 
+(fn map [f list]
+  (icollect [_ v (ipairs list)] (f v)))
+
+(fn fold [f initial list]
+  (accumulate [result initial
+                _ v (ipairs list)]
+    (f result v)))
+
+(fn list-max [list]
+  (fold math.max 0 list))
+
+(fn list-min [list]
+  (fold math.min 0 list))
+
 (fn fish.pprint [block]
   "Pretty print `block`"
   (..
@@ -259,6 +273,27 @@
           (+ 1 block.out-pos))))
     :right (error "not implemented")))
 
+(fn fish.left-to-right-1-1 [block]
+  "Change in-edge to :left, in-pos to 1, out-edge to :right and out-pos to 1"
+  (let [block (-> block fish.left> fish.>right)]
+    (if (= 1 block.in-pos block.out-pos)
+      block
+      (fish.block
+        (icollect [i line (ipairs block.code)]
+          (..
+            (if
+              (= 1 block.in-pos) ""
+              (= i block.in-pos) ">"
+              (= 1 i)            "v"
+                                 " ")
+            line
+            (if
+              (= 1 block.out-pos) ""
+              (= i block.out-pos) "^"
+              (= 1 i)             ">"
+                                  " ")))
+        :left 1 :right 1))))
+
 ;; control flow
 (fn fish.generic-loop [start end left-in left right-out right]
   ""
@@ -320,6 +355,48 @@
             (if (= i then.out-pos)
               "^"
               " "))))
+    (fish.block code :left 1 :right 1)))
+
+(fn fish.cond [clauses]
+  (assert (>= (length clauses) 2)      "cond requires at least two arguments")
+  (assert (= 0 (% (length clauses) 2)) "cond requires an even number of arguments")
+  (let [clauses (map fish.left-to-right-1-1 clauses)
+
+        conditions
+        (fcollect [i 1 (length clauses) 2]
+          (fish.block
+            (fcollect [j 1 (+ 1 (: (. clauses i) :y))]
+              (if (<= j (: (. clauses i) :y))
+                  (..
+                    (if (= 1 j) ">" " ")
+                    (. clauses i :code j)
+                    (if (= 1 j) "?!v" "   "))
+                  (..
+                    "v"
+                    (string.rep " " (: (. clauses i) :x))
+                    "  <")))
+            :left 1 :right 1))
+
+        bodies
+        (fcollect [i 2 (length clauses) 2]
+          (. clauses i))
+
+        merged-pairs
+        (fcollect [i 1 (length conditions)]
+          (fish.hcat (. conditions i) (. bodies i)))
+
+        width (list-max (map #(: $1 :x) merged-pairs))
+
+        code []]
+    (each [j pair (ipairs merged-pairs)]
+      (for [i 1 (pair:y)]
+        (table.insert
+          code
+          (..
+            (. pair :code i)
+            (string.rep " " (- width (pair:x)))
+            (if (= i j 1) ">" (= 1 i) "^" " ")))))
+    (table.insert code (.. ">" (string.rep " " (- width 1)) "^"))
     (fish.block code :left 1 :right 1)))
 
 (fn fish.while* [condition block]
