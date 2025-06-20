@@ -165,7 +165,9 @@ div :÷
         ;; end of a printed string
         (and
           (= char "\"")
-          (= :print state))
+          (= :print state)
+          (or (=    "\\\\" (word:sub (- (length word) 1)))
+              (not= "\\"   (word:sub (length word)))))
         (do
           (nested-insert ast depth
             (fennel.list
@@ -173,11 +175,12 @@ div :÷
               (-> word
                 (string.gsub "\\n" "\n")
                 (string.gsub "\\\"" "\"")
+                (string.gsub "\\\\" "\\")
                 (.. ""))))
           (set word "")
           (set state :normal))
 
-          ;; start of a string
+        ;; start of a string
         (and
           (= char "'")
           (= :normal state))
@@ -186,7 +189,9 @@ div :÷
         ;; end of a string
         (and
           (= char "'")
-          (= :string state))
+          (= :string state)
+          (or (=    "\\\\" (word:sub (- (length word) 1)))
+              (not= "\\"   (word:sub (length word)))))
         (do
           (nested-insert ast depth
             (fennel.list
@@ -194,6 +199,7 @@ div :÷
               (-> word
                 (string.gsub "\\n" "\n")
                 (string.gsub "\\'" "'")
+                (string.gsub "\\\\" "\\")
                 (.. ""))))
           (set word "")
           (set state :normal))
