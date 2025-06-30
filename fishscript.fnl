@@ -13,6 +13,7 @@ div :÷
 { < not } :>=
 { > not } :<=
 { [ left dup right ] } :nth
+{ 1 + [ left drop right ] } :set-nth
 { dup 0 < 2 * 1 swap - * } :abs
 { dup 1 % - } :floor
 { < 1 + nth } :min

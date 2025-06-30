@@ -123,6 +123,7 @@ fishscript | ><> | description
 `>=` | `(0=` |
 `<=` | `)0=` |
 `nth` | | push the nth element from the top of the stack (`1 nth` = `dup`)
+`set-nth` | | ( ... value n -- ) set the nth element from the top of the stack to value
 `abs` | `:0(2*1$-*n` |
 `floor` | `:1%-` |
 `min` | | ( x y -- min(x,y) )
